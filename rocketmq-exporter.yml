@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rocketmq-exporter-810c7288
+  namespace: rocketmq-system
+  labels:
+    app: rocketmq-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rocketmq-exporter
+  template:
+    metadata:
+      labels:
+        app: rocketmq-exporter
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+        meta.helm.sh/release-name: rocketmq-exporter
+        meta.helm.sh/release-namespace: rocketmq-system
+    spec:
+      imagePullSecrets:
+      - name: xxxx
+      containers:
+      - name: rocketmq-exporter
+        image: xxxxx.xxx.com/rocketmq-exporter:0.0.2-SNAPSHOT
+        resources:
+          limits:
+            cpu: 2
+            memory: 4Gi
+          requests:
+            cpu: 2
+            memory: 4Gi
+        ports:
+            - name: metric-port
+              protocol: TCP
+              containerPort: 5557
+        command:
+          - /opt/jdk/bin/java
+        args:
+          - -Drocketmq.namesrv.addr=1.1.1.1:9876
+          - -Drocketmq.config.accessKey=xxxx
+          - -Drocketmq.config.secretKey=xxxx
+          - -jar
+          - rocketmq-exporter-0.0.2-SNAPSHOT.jar
+
